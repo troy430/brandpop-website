@@ -12,6 +12,8 @@ import {
   getDynamicSteps,
   needsA2P,
   needsLeads,
+  needsCalendar,
+  calendarRequired,
 } from "@/lib/onboarding/schema";
 import { StepIndicator } from "@/components/onboarding/StepIndicator";
 import { ServiceSelection } from "@/components/onboarding/steps/ServiceSelection";
@@ -117,7 +119,9 @@ function getStepFields(step: OnboardingStep, services: string[] = []): string[] 
         "a2p.tosAccepted",
       ];
     case "calendar":
+      if (!calendarRequired(services)) return [];
       return [
+        "calendar.ghlInvitationEmail",
         "calendar.availableDays",
         "calendar.availableHours.start",
         "calendar.availableHours.end",
@@ -188,6 +192,7 @@ export function OnboardingForm() {
   const dynamicSteps = getDynamicSteps(services || []);
   const showA2P = needsA2P(services || []);
   const showLeads = needsLeads(services || []);
+  const showCalendar = needsCalendar(services || []);
 
   // Load progress from localStorage
   useEffect(() => {
@@ -463,7 +468,7 @@ export function OnboardingForm() {
               {currentStep === "services" && <ServiceSelection control={control} />}
               {currentStep === "business" && <BusinessProfile control={control} />}
               {currentStep === "a2p" && showA2P && <A2PCompliance control={control} />}
-              {currentStep === "calendar" && <CalendarSetup control={control} />}
+              {currentStep === "calendar" && showCalendar && <CalendarSetup control={control} />}
               {currentStep === "contacts" && <ContactsSetup control={control} />}
               {currentStep === "leads" && showLeads && <LeadUpload control={control} />}
               {currentStep === "review" && (

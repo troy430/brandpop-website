@@ -1,4 +1,4 @@
-import { OnboardingData, industries, needsA2P, needsLeads } from "@/lib/onboarding/schema";
+import { OnboardingData, industries, needsA2P, needsLeads, needsCalendar } from "@/lib/onboarding/schema";
 import { Button } from "@/components/ui/button";
 import { Edit3 } from "lucide-react";
 
@@ -72,6 +72,7 @@ function LabelValue({ label, value }: { label: string; value?: string | number |
 export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitProps) {
   const showA2P = needsA2P(data.services || []);
   const showLeads = needsLeads(data.services || []);
+  const showCalendar = needsCalendar(data.services || []);
   return (
     <div className="space-y-6">
       <div>
@@ -154,25 +155,27 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
       )}
 
 
-      <ReviewSection title="Calendar & GHL" step="calendar" onEdit={onEditStep}>
-        <LabelValue label="GHL invitation email" value={data.calendar?.ghlInvitationEmail} />
-        <LabelValue label="Duration" value={`${data.calendar?.appointmentDuration} min`} />
-        <LabelValue label="Buffer" value={`${data.calendar?.bufferTime} min`} />
-        <LabelValue
-          label="Days"
-          value={data.calendar?.availableDays?.join(", ")}
-        />
-        <LabelValue
-          label="Hours"
-          value={
-            data.calendar?.availableHours
-              ? `${data.calendar.availableHours.start} – ${data.calendar.availableHours.end}`
-              : undefined
-          }
-        />
-        <LabelValue label="Same day" value={data.calendar?.allowSameDay ? "Yes" : "No"} />
-        <LabelValue label="Types" value={data.calendar?.appointmentTypes?.join(", ")} />
-      </ReviewSection>
+      {showCalendar && (
+        <ReviewSection title="Calendar & GHL" step="calendar" onEdit={onEditStep}>
+          <LabelValue label="GHL invitation email" value={data.calendar?.ghlInvitationEmail} />
+          <LabelValue label="Duration" value={`${data.calendar?.appointmentDuration} min`} />
+          <LabelValue label="Buffer" value={`${data.calendar?.bufferTime} min`} />
+          <LabelValue
+            label="Days"
+            value={data.calendar?.availableDays?.join(", ")}
+          />
+          <LabelValue
+            label="Hours"
+            value={
+              data.calendar?.availableHours
+                ? `${data.calendar.availableHours.start} – ${data.calendar.availableHours.end}`
+                : undefined
+            }
+          />
+          <LabelValue label="Same day" value={data.calendar?.allowSameDay ? "Yes" : "No"} />
+          <LabelValue label="Types" value={data.calendar?.appointmentTypes?.join(", ")} />
+        </ReviewSection>
+      )}
 
       <ReviewSection title="Notifications" step="contacts" onEdit={onEditStep}>
         {data.notifications?.recipients?.map((r, i) => (

@@ -84,8 +84,8 @@ export const onboardingSchema = z.object({
     address: addressSchema,
     website: z.string().url("Valid URL required").or(z.literal("")),
     industry: z.enum(industries),
-    yearsInBusiness: z.preprocess((val) => val === "" ? undefined : Number(val), z.number().min(0).optional()),
-    averageTicket: z.preprocess((val) => val === "" ? undefined : Number(val), z.number().min(0).optional()),
+    yearsInBusiness: z.preprocess((val) => (val === "" || val === undefined || val === null) ? undefined : Number(val), z.number().min(0).optional()),
+    averageTicket: z.preprocess((val) => (val === "" || val === undefined || val === null) ? undefined : Number(val), z.number().min(0).optional()),
     einNumber: z.string().optional(),
     // Voice AI
     callForwardingNumber: z.string().optional(),
@@ -101,37 +101,41 @@ export const onboardingSchema = z.object({
     billing: contactSchema.optional(),
   }),
 
-  // Step 3: A2P Compliance (only required for DBR and Speed-to-Lead)
+  // Step 3: A2P Compliance. Hard-required only for DBR and Speed-to-Lead —
+  // enforced conditionally in superRefine below via needsA2P(), not here.
+  // Fields stay optional/permissive at this level so a client that never
+  // sees this step (and whose defaultValues still populate the object)
+  // isn't blocked at submission by requirements that don't apply to them.
   a2p: z.object({
-    businessType: z.enum(businessTypes),
-    employeeCount: z.string().min(1, "Required"),
-    useCase: z.enum(useCases),
+    businessType: z.enum(businessTypes).optional(),
+    employeeCount: z.string().optional(),
+    useCase: z.enum(useCases).optional(),
     useCaseDescription: z.string().optional(),
-    monthlyVolume: z.string().min(1, "Required"),
+    monthlyVolume: z.string().optional(),
     sampleMessage: z.string().optional(),
-    optInMethod: z.string().min(10, "Describe how leads opt in"),
+    optInMethod: z.string().optional(),
     smsPhoneNumber: z.string().optional(),
     callForwardingNumber: z.string().optional(),
-    tosAccepted: z.boolean().refine((val) => val === true, {
-      message: "You must accept the Terms of Service",
-    }),
+    tosAccepted: z.boolean().default(false),
     needsPrivacyPolicy: z.boolean().default(false),
   }).optional(),
 
-  // Step 4: Calendar + GHL
+  // Step 4: Calendar + GHL (hard-required only for services that book
+  // appointments — see calendarRequired(). Optional for Live Chat, skipped
+  // entirely for Reputation Management alone.)
   calendar: z.object({
-    ghlInvitationEmail: z.string().email("Valid email required").min(1, "Email is required"),
+    ghlInvitationEmail: z.string().email("Valid email required").or(z.literal("")).optional(),
     appointmentDuration: z.coerce.number().min(5).default(30),
     bufferTime: z.coerce.number().min(0).default(0),
-    availableDays: z.array(z.enum(daysOfWeek)).min(1, "Select at least one day"),
+    availableDays: z.array(z.enum(daysOfWeek)).default([]),
     availableHours: z.object({
-      start: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Use HH:MM format"),
-      end: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Use HH:MM format"),
+      start: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Use HH:MM format").or(z.literal("")).optional(),
+      end: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Use HH:MM format").or(z.literal("")).optional(),
     }),
     minNotice: z.coerce.number().min(0).default(24),
     maxAdvanceBooking: z.coerce.number().min(1).default(30),
     allowSameDay: z.boolean().default(false),
-    appointmentTypes: z.array(z.string()).min(1, "Select at least one type"),
+    appointmentTypes: z.array(z.string()).default([]),
     zoomLink: z.string().url().or(z.literal("")).optional(),
     inPersonAddress: z.string().optional(),
   }),
@@ -217,6 +221,28 @@ export const onboardingSchema = z.object({
     }
   }
 
+  // Calendar/booking fields are only hard-required for services that book
+  // appointments (AI Voice, DBR, Speed-to-Lead). Live Chat can optionally
+  // enable booking; Reputation Management never needs this at all.
+  if (calendarRequired(data.services)) {
+    const cal = data.calendar;
+    if (!cal.ghlInvitationEmail?.trim()) {
+      ctx.addIssue({ code: "custom", message: "Email is required", path: ["calendar", "ghlInvitationEmail"] });
+    }
+    if (!cal.availableDays || cal.availableDays.length === 0) {
+      ctx.addIssue({ code: "custom", message: "Select at least one day", path: ["calendar", "availableDays"] });
+    }
+    if (!cal.availableHours.start) {
+      ctx.addIssue({ code: "custom", message: "Use HH:MM format", path: ["calendar", "availableHours", "start"] });
+    }
+    if (!cal.availableHours.end) {
+      ctx.addIssue({ code: "custom", message: "Use HH:MM format", path: ["calendar", "availableHours", "end"] });
+    }
+    if (!cal.appointmentTypes || cal.appointmentTypes.length === 0) {
+      ctx.addIssue({ code: "custom", message: "Select at least one type", path: ["calendar", "appointmentTypes"] });
+    }
+  }
+
   // Only validate leads when DBR is selected
   if (needsLeads(data.services)) {
     // leads is already optional, so just check it's present
@@ -274,6 +300,10 @@ export function getPrevStep(current: OnboardingStep): OnboardingStep | null {
 // Service categories
 const a2pServices: readonly string[] = ["dbr", "speed_to_lead"];
 const leadServices: readonly string[] = ["dbr"];
+// Services whose AI actually books appointments — calendar setup is mandatory.
+const calendarRequiredServices: readonly string[] = ["ai_voice", "dbr", "speed_to_lead"];
+// Services that can optionally book appointments — calendar step shows but isn't required.
+const calendarOptionalServices: readonly string[] = ["live_chat"];
 
 export function needsA2P(services: string[]): boolean {
   return services.some((s) => a2pServices.includes(s));
@@ -283,12 +313,25 @@ export function needsLeads(services: string[]): boolean {
   return services.some((s) => leadServices.includes(s));
 }
 
+export function calendarRequired(services: string[]): boolean {
+  return services.some((s) => calendarRequiredServices.includes(s));
+}
+
+export function needsCalendar(services: string[]): boolean {
+  return services.some(
+    (s) => calendarRequiredServices.includes(s) || calendarOptionalServices.includes(s)
+  );
+}
+
 export function getDynamicSteps(services: string[]): OnboardingStep[] {
   const steps: OnboardingStep[] = ["services", "business"];
   if (needsA2P(services)) {
     steps.push("a2p");
   }
-  steps.push("calendar", "contacts");
+  if (needsCalendar(services)) {
+    steps.push("calendar");
+  }
+  steps.push("contacts");
   if (needsLeads(services)) {
     steps.push("leads");
   }

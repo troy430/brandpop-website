@@ -1,8 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-let cachedClient: ReturnType<typeof createClient> | null = null;
+let cachedClient: SupabaseClient<any, any, any> | null = null;
 
-export function getSupabase() {
+export function getSupabase(): SupabaseClient<any, any, any> {
   if (cachedClient) return cachedClient;
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -19,10 +19,10 @@ export function getSupabase() {
         insert: async () => ({ error: null }),
         delete: async () => ({ error: null }),
       }),
-    } as unknown as ReturnType<typeof createClient>;
+    } as unknown as SupabaseClient<any, any, any>;
   }
 
-  cachedClient = createClient(supabaseUrl, supabaseServiceKey, {
+  cachedClient = createClient<any, any, any>(supabaseUrl, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,

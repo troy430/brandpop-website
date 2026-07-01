@@ -1,5 +1,5 @@
-import { Control, Controller } from "react-hook-form";
-import { OnboardingData, daysOfWeek } from "@/lib/onboarding/schema";
+import { Control, Controller, useFormContext } from "react-hook-form";
+import { OnboardingData, daysOfWeek, calendarRequired } from "@/lib/onboarding/schema";
 import { Input, Checkbox } from "@/components/onboarding/FormElements";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
@@ -19,6 +19,10 @@ interface CalendarSetupProps {
 }
 
 export function CalendarSetup({ control }: CalendarSetupProps) {
+  const { watch } = useFormContext();
+  const services: string[] = watch("services") || [];
+  const required = calendarRequired(services);
+
   return (
     <div className="space-y-6">
       <div>
@@ -26,6 +30,11 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
         <p className="mt-1 text-text-secondary">
           Connect your availability so we can book appointments directly into your calendar.
         </p>
+        {!required && (
+          <p className="mt-1 text-xs text-text-muted">
+            Optional for Live Chat — only fill this in if you want it to book appointments.
+          </p>
+        )}
       </div>
 
       <Controller
@@ -36,7 +45,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
             label="Email for GHL subaccount invitation"
             placeholder="owner@company.com"
             error={fieldState.error?.message}
-            required
+            required={required}
             {...field}
           />
         )}
@@ -100,7 +109,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
 
         <div>
           <label className="block text-sm font-medium text-text-secondary mb-2">
-            Available days<span className="text-error ml-0.5">*</span>
+            Available days{required && <span className="text-error ml-0.5">*</span>}
           </label>
           <Controller
             name="calendar.availableDays"
@@ -151,7 +160,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
                 label="Start time"
                 type="time"
                 error={fieldState.error?.message}
-                required
+                required={required}
                 {...field}
               />
             )}
@@ -164,7 +173,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
                 label="End time"
                 type="time"
                 error={fieldState.error?.message}
-                required
+                required={required}
                 {...field}
               />
             )}
@@ -186,7 +195,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
 
       <div className="rounded-xl border border-border bg-surface p-5">
         <h3 className="text-sm font-semibold text-text-primary mb-3">
-          Appointment types<span className="text-error ml-0.5">*</span>
+          Appointment types{required && <span className="text-error ml-0.5">*</span>}
         </h3>
         <div className="space-y-3">
           <Controller
