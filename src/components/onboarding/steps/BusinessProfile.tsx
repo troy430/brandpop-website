@@ -1,6 +1,6 @@
 import { Control, Controller, useFormContext } from "react-hook-form";
 import { useState } from "react";
-import { OnboardingData, industries } from "@/lib/onboarding/schema";
+import { OnboardingData, industries, websitePlatforms } from "@/lib/onboarding/schema";
 import { Input, Select, FileUpload } from "@/components/onboarding/FormElements";
 import { uploadFile } from "@/lib/upload";
 
@@ -23,8 +23,24 @@ interface BusinessProfileProps {
   control: any;
 }
 
+const websitePlatformOptions = [
+  { value: "", label: "Select your platform" },
+  { value: "wordpress", label: "WordPress" },
+  { value: "wix", label: "Wix" },
+  { value: "webflow", label: "Webflow" },
+  { value: "squarespace", label: "Squarespace" },
+  { value: "shopify", label: "Shopify" },
+  { value: "custom", label: "Custom / developer built" },
+  { value: "other", label: "Other" },
+];
+
 export function BusinessProfile({ control }: BusinessProfileProps) {
   const { setValue, watch } = useFormContext();
+  const services: string[] = watch("services") || [];
+  const needsVoiceAI = services.includes("ai_voice");
+  const needsLiveChat = services.includes("live_chat");
+  const needsReputation = services.includes("reputation_management");
+
   const [uploadStatus, setUploadStatus] = useState<{
     fileName?: string;
     uploading?: boolean;
@@ -219,6 +235,76 @@ export function BusinessProfile({ control }: BusinessProfileProps) {
           <p className="text-xs text-text-muted">Uploading...</p>
         )}
       </div>
+
+      {/* Service-specific fields */}
+      {(needsVoiceAI || needsLiveChat || needsReputation) && (
+        <div className="rounded-xl border border-border bg-surface p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-text-primary">Service setup</h3>
+
+          {needsVoiceAI && (
+            <Controller
+              name="business.callForwardingNumber"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  label="Call forwarding number"
+                  placeholder="(503) 555-0100"
+                  error={fieldState.error?.message}
+                  required
+                  {...field}
+                />
+              )}
+            />
+          )}
+          {needsVoiceAI && (
+            <p className="text-xs text-text-muted -mt-2">
+              The number your AI Voice Receptionist will answer. Usually your existing business line.
+            </p>
+          )}
+
+          {needsLiveChat && (
+            <Controller
+              name="business.websitePlatform"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Select
+                  label="Website platform"
+                  options={websitePlatformOptions}
+                  error={fieldState.error?.message}
+                  required
+                  {...field}
+                />
+              )}
+            />
+          )}
+          {needsLiveChat && (
+            <p className="text-xs text-text-muted -mt-2">
+              We'll send you the right installation instructions for your platform.
+            </p>
+          )}
+
+          {needsReputation && (
+            <Controller
+              name="business.googleBusinessUrl"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  label="Google Business Profile URL"
+                  placeholder="https://g.page/your-business"
+                  error={fieldState.error?.message}
+                  required
+                  {...field}
+                />
+              )}
+            />
+          )}
+          {needsReputation && (
+            <p className="text-xs text-text-muted -mt-2">
+              Happy customers will be sent here to leave a review. Find it at business.google.com.
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="rounded-xl border border-border bg-surface p-5">
         <h3 className="text-sm font-semibold text-text-primary">Primary contact</h3>

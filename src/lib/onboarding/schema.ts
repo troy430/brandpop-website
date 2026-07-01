@@ -63,6 +63,16 @@ export const addressSchema = z.object({
   zip: z.string().min(5, "ZIP code is required"),
 });
 
+export const websitePlatforms = [
+  "wordpress",
+  "wix",
+  "webflow",
+  "squarespace",
+  "shopify",
+  "custom",
+  "other",
+] as const;
+
 export const onboardingSchema = z.object({
   // Step 1: Service Selection
   services: z.array(z.enum(serviceTypes)).min(1, "Select at least one service"),
@@ -77,6 +87,12 @@ export const onboardingSchema = z.object({
     yearsInBusiness: z.preprocess((val) => val === "" ? undefined : Number(val), z.number().min(0).optional()),
     averageTicket: z.preprocess((val) => val === "" ? undefined : Number(val), z.number().min(0).optional()),
     einNumber: z.string().optional(),
+    // Voice AI
+    callForwardingNumber: z.string().optional(),
+    // Live Chat
+    websitePlatform: z.enum(websitePlatforms).optional(),
+    // Reputation Management
+    googleBusinessUrl: z.string().url("Enter a valid Google Business URL").or(z.literal("")).optional(),
   }),
 
   contacts: z.object({
