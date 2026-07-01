@@ -169,6 +169,21 @@ export const onboardingSchema = z.object({
   leadCsvPath: z.string().optional(),
   leadCsvUrl: z.string().optional(),
 }).superRefine((data, ctx) => {
+  // Voice AI requires call forwarding number
+  if (data.services.includes("ai_voice") && !data.business.callForwardingNumber?.trim()) {
+    ctx.addIssue({ code: "custom", message: "Call forwarding number is required for AI Voice", path: ["business", "callForwardingNumber"] });
+  }
+
+  // Live Chat requires website platform
+  if (data.services.includes("live_chat") && !data.business.websitePlatform) {
+    ctx.addIssue({ code: "custom", message: "Website platform is required for Live Chat", path: ["business", "websitePlatform"] });
+  }
+
+  // Reputation Management requires Google Business URL
+  if (data.services.includes("reputation_management") && !data.business.googleBusinessUrl?.trim()) {
+    ctx.addIssue({ code: "custom", message: "Google Business Profile URL is required for Reputation Management", path: ["business", "googleBusinessUrl"] });
+  }
+
   // Only validate A2P when DBR or Speed-to-Lead are selected
   if (needsA2P(data.services)) {
     if (!data.a2p) {

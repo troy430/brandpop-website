@@ -87,12 +87,12 @@ const defaultValues: OnboardingData = {
   leadCsvUrl: "",
 };
 
-function getStepFields(step: OnboardingStep): string[] {
+function getStepFields(step: OnboardingStep, services: string[] = []): string[] {
   switch (step) {
     case "services":
       return ["services"];
-    case "business":
-      return [
+    case "business": {
+      const fields = [
         "business.legalName",
         "business.address.street",
         "business.address.city",
@@ -102,6 +102,11 @@ function getStepFields(step: OnboardingStep): string[] {
         "contacts.primary.name",
         "contacts.primary.email",
       ];
+      if (services.includes("ai_voice")) fields.push("business.callForwardingNumber");
+      if (services.includes("live_chat")) fields.push("business.websitePlatform");
+      if (services.includes("reputation_management")) fields.push("business.googleBusinessUrl");
+      return fields;
+    }
     case "a2p":
       return [
         "a2p.businessType",
@@ -217,7 +222,7 @@ export function OnboardingForm() {
   }, [methods, currentStep, completedSteps]);
 
   const validateStep = async (step: OnboardingStep): Promise<{ valid: boolean; messages?: string[] }> => {
-    const fields = getStepFields(step);
+    const fields = getStepFields(step, services || []);
     if (fields.length === 0) return { valid: true };
     const valid = await trigger(fields as any);
     if (!valid) {
