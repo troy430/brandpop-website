@@ -6,7 +6,7 @@ import { Database, Phone, Zap, MessageSquare, Star } from "lucide-react";
 const serviceConfig = {
   dbr: {
     label: "Database Reactivation",
-    description: "AI-powered SMS outreach that reactivates lapsed patients and dead leads.",
+    description: "AI-powered SMS outreach that reactivates cold leads and past customers.",
     icon: Database,
   },
   ai_voice: {
