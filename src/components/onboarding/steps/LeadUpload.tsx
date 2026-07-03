@@ -34,7 +34,7 @@ export function LeadUpload({ control }: LeadUploadProps) {
       <div>
         <h2 className="text-2xl font-bold text-text-primary">Lead data</h2>
         <p className="mt-1 text-text-secondary">
-          Only needed for Database Reactivation. Skip this step if you're only setting up AEO or Voice.
+          Only needed for Database Reactivation. Skip this step if you&rsquo;re not reactivating a lead list.
         </p>
       </div>
 

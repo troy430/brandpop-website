@@ -45,9 +45,11 @@ const defaultValues: OnboardingData = {
     primary: { name: "", title: "", email: "", phone: "" },
   },
   a2p: {
-    businessType: "llc",
+    // No defaults for businessType/useCase: carriers review A2P registrations,
+    // so the client must consciously choose these.
+    businessType: undefined,
     employeeCount: "",
-    useCase: "lead_reactivation",
+    useCase: undefined,
     useCaseDescription: "",
     monthlyVolume: "",
     sampleMessage: "",
@@ -203,7 +205,12 @@ export function OnboardingForm() {
         if (parsed.data) {
           methods.reset(parsed.data);
         }
-        if (parsed.step) setCurrentStep(parsed.step);
+        // Only restore a step that still exists for the saved service
+        // selection — otherwise the form renders an empty card.
+        const validSteps = getDynamicSteps(parsed.data?.services || []);
+        if (parsed.step && validSteps.includes(parsed.step)) {
+          setCurrentStep(parsed.step);
+        }
         if (parsed.completed) setCompletedSteps(parsed.completed);
       }
     } catch {
@@ -404,7 +411,7 @@ export function OnboardingForm() {
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">
                     2
                   </span>
-                  AI configuration and voice/SEO optimization
+                  AI configuration, tuned to your business and tone
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">

@@ -1,76 +1,229 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'Lexend';
-  src: url('/fonts/Lexend-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
+/*
+  Night Shift Ledger — design tokens.
+  Source of truth: DESIGN.md. Reference rendering:
+  ~/.gstack/projects/brandpop.ai/designs/design-system-20260702/night-shift-ledger.html
+*/
 :root {
-  --background: #09090D;
-  --foreground: #F4F4EF;
-  --surface: #16161F;
-  --surface-elevated: #1F1F2C;
-  --border: #2C2C3E;
-  --accent: #B3FF57;
-  --accent-hover: #8FCC3F;
-  --text-primary: #F4F4EF;
-  --text-secondary: #AAAABF;
-  --text-muted: #5A5A78;
+  --bone: #f3f1e9;
+  --bone-deep: #ebe8dd;
+  --ink: #141410;
+  --ink-soft: #4a4a40;
+  --ink-faint: #8a8a7c;
+  --lime: #b3ff57;
+  --night: #09090d;
+  --night-soft: #23232e;
+  --dead: #e4572e;
+  --booked: #1e7f4f;
+  --rule: rgba(20, 20, 16, 0.18);
+  --card: #fdfcf7;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-surface: var(--surface);
-  --color-surface-elevated: var(--surface-elevated);
-  --color-border: var(--border);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --font-sans: 'Lexend', ui-sans-serif, system-ui, sans-serif;
+  --color-bone: var(--bone);
+  --color-bone-deep: var(--bone-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-lime: var(--lime);
+  --color-night: var(--night);
+  --color-night-soft: var(--night-soft);
+  --color-dead: var(--dead);
+  --color-booked: var(--booked);
+  --color-rule: var(--rule);
+  --color-card: var(--card);
+  --font-sans: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  /* Legacy token names still used by onboarding/admin/get-started —
+     mapped onto the ledger palette until those flows are restyled. */
+  --color-background: var(--bone);
+  --color-foreground: var(--ink);
+  --color-surface: var(--card);
+  --color-surface-elevated: var(--bone-deep);
+  --color-border: var(--rule);
+  --color-accent: var(--lime);
+  --color-accent-hover: #8fcc3f;
+  --color-text-primary: var(--ink);
+  --color-text-secondary: var(--ink-soft);
+  --color-text-muted: var(--ink-faint);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bone);
+  color: var(--ink);
   font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Smooth scrolling */
+/* Paper grain over the whole page. Keep subtle. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom selection color */
 ::selection {
-  background: rgba(179, 255, 87, 0.25);
-  color: var(--text-primary);
+  background: var(--lime);
+  color: var(--ink);
 }
 
-/* Shimmer animation for gradient text */
-@keyframes shimmer {
-  0% {
-    background-position: 200% center;
+/* ── Signature pieces ─────────────────────────────── */
+
+/* Highlighter swipe behind one key word in a serif headline. Max one per headline. */
+.hl {
+  background: linear-gradient(
+    104deg,
+    transparent 2%,
+    var(--lime) 4%,
+    var(--lime) 96%,
+    transparent 98%
+  );
+  padding: 0 6px 2px;
+  margin: 0 -2px;
+}
+
+/* Asterisk mark — ink on a lime chip. Every one resolves to a real footnote. */
+.star-mark {
+  color: var(--ink);
+  background: var(--lime);
+  padding: 0 3px;
+  font-weight: 600;
+}
+
+/* Primary button: lime fill, ink border, hard offset shadow. */
+.btn-lime {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  background: var(--lime);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  cursor: pointer;
+}
+.btn-lime:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Ink button — for use on lime surfaces. */
+.btn-ink {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  background: var(--ink);
+  color: var(--bone);
+  border-radius: 3px;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
+  transition: opacity 0.12s ease;
+}
+.btn-ink:hover {
+  opacity: 0.85;
+}
+
+/* Ghost link — mono with lime underline. */
+.btn-ghost {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 2px solid var(--lime);
+  padding-bottom: 2px;
+}
+
+/* Section kicker with trailing rule. */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.kicker::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* Exhibit card: white card, ink border, hard offset shadow. */
+.exhibit-card {
+  background: var(--card);
+  border: 1px solid var(--ink);
+  box-shadow: 6px 6px 0 rgba(20, 20, 16, 0.12);
+}
+
+/* ── SMS exhibit animation ─────────────────────────
+   Pure CSS so the thread animates without JS and the
+   content is always in the server-rendered HTML. */
+@keyframes msg-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  100% {
-    background-position: -200% center;
+}
+.msg-in {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: msg-in 0.45s ease forwards;
+}
+.msg-d1 { animation-delay: 0.8s; }
+.msg-d2 { animation-delay: 2.2s; }
+.msg-d3 { animation-delay: 3.6s; }
+.msg-d4 { animation-delay: 5s; }
+.msg-d5 { animation-delay: 6.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .msg-in {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
 
-.animate-shimmer {
-  animation: shimmer 4s linear infinite;
+/* ── Calculator slider ────────────────────────────── */
+input[type="range"].calc-range {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 2px;
+  background: var(--ink);
+  outline: none;
 }
-
-/* Hide scrollbar utility */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+input[type="range"].calc-range::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--lime);
+  border: 2px solid var(--ink);
+  cursor: pointer;
 }
-.no-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+input[type="range"].calc-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--lime);
+  border: 2px solid var(--ink);
+  cursor: pointer;
 }

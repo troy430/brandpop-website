@@ -9,7 +9,7 @@ const steps = [
     number: "01",
     title: "Choose your services",
     description:
-      "Select what you need — Database Reactivation, AI Voice, Speed to Lead, or Answer Engine Optimization. Mix and match.",
+      "Select what you need — Database Reactivation, AI Voice Receptionist, Speed to Lead, Live Chat, or Reputation Management. Mix and match.",
     icon: ClipboardList,
   },
   {

@@ -1,27 +1,27 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { LogoMarquee } from "@/components/sections/LogoMarquee";
-import { LiveDemo } from "@/components/sections/LiveDemo";
-import { Services } from "@/components/sections/Services";
-import { VisualHowItWorks } from "@/components/sections/VisualHowItWorks";
-import { SocialProof } from "@/components/sections/SocialProof";
-import { DemoCta } from "@/components/sections/DemoCta";
+import { FactsStrip } from "@/components/sections/FactsStrip";
+import { ServicesLedger } from "@/components/sections/ServicesLedger";
+import { TryItLive } from "@/components/sections/TryItLive";
+import { TheMath } from "@/components/sections/TheMath";
+import { OnboardingCta } from "@/components/sections/OnboardingCta";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 
 export default function Home() {
   return (
-    <>
+    <div className="relative z-[2]">
       <Navbar />
       <main className="flex-1">
         <Hero />
-        <LogoMarquee />
-        <LiveDemo />
-        <Services />
-        <VisualHowItWorks />
-        <SocialProof />
-        <DemoCta />
+        <FactsStrip />
+        <ServicesLedger />
+        <TryItLive />
+        <TheMath />
+        <OnboardingCta />
       </main>
       <Footer />
-    </>
+      <ChatWidget />
+    </div>
   );
 }

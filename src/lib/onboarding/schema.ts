@@ -107,9 +107,11 @@ export const onboardingSchema = z.object({
   // sees this step (and whose defaultValues still populate the object)
   // isn't blocked at submission by requirements that don't apply to them.
   a2p: z.object({
-    businessType: z.enum(businessTypes).optional(),
+    // "" is the select placeholder — treat it as unset so the superRefine
+    // "Required" message fires instead of a raw enum error.
+    businessType: z.preprocess((v) => (v === "" ? undefined : v), z.enum(businessTypes).optional()),
     employeeCount: z.string().optional(),
-    useCase: z.enum(useCases).optional(),
+    useCase: z.preprocess((v) => (v === "" ? undefined : v), z.enum(useCases).optional()),
     useCaseDescription: z.string().optional(),
     monthlyVolume: z.string().optional(),
     sampleMessage: z.string().optional(),
