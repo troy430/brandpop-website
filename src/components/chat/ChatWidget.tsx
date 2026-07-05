@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { JASMINE_OPENING } from "@/lib/jasmine";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
+
+// Shown before the first message so nobody has to wonder what to type.
+const STARTERS: { label: string; message: string }[] = [
+  { label: "Demo it for my industry", message: "Show me a demo for my industry" },
+  { label: "What does Brandpop do?", message: "What does Brandpop actually do?" },
+  { label: "How does pricing work?", message: "How does pricing work?" },
+];
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -15,27 +22,32 @@ export function ChatWidget() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Refs mirror state so sendText stays correct when fired from window events.
+  const messagesRef = useRef<ChatMessage[]>([]);
+  const busyRef = useRef(false);
+  const endedRef = useRef(false);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-  }, [messages, open]);
+  }, [messages, open, busy]);
 
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open, busy]);
 
-  useEffect(() => {
-    const openChat = () => setOpen(true);
-    window.addEventListener("open-jasmine", openChat);
-    return () => window.removeEventListener("open-jasmine", openChat);
-  }, []);
-
-  async function send() {
-    const text = input.trim();
-    if (!text || busy || ended) return;
-    setInput("");
-    const history: ChatMessage[] = [...messages, { role: "user", content: text }];
+  const sendText = useCallback(async (raw: string) => {
+    const text = raw.trim();
+    if (!text || busyRef.current || endedRef.current) return;
+    const history: ChatMessage[] = [
+      ...messagesRef.current,
+      { role: "user", content: text },
+    ];
     setMessages(history);
     setBusy(true);
+    busyRef.current = true;
 
     try {
       const res = await fetch("/api/chat", {
@@ -56,7 +68,10 @@ export function ChatWidget() {
         const current = reply;
         setMessages([...history, { role: "assistant", content: current }]);
       }
-      if (reply.trim() === "goodbye") setEnded(true);
+      if (reply.trim() === "goodbye") {
+        setEnded(true);
+        endedRef.current = true;
+      }
     } catch {
       setMessages([
         ...history,
@@ -68,7 +83,28 @@ export function ChatWidget() {
       ]);
     } finally {
       setBusy(false);
+      busyRef.current = false;
     }
+  }, []);
+
+  // Anywhere on the page can open the chat — optionally with a first message
+  // (the industry chips in Try It Live use this to jump straight into roleplay).
+  useEffect(() => {
+    const openChat = (e: Event) => {
+      setOpen(true);
+      const message = (e as CustomEvent).detail?.message;
+      if (typeof message === "string" && message.trim()) {
+        sendText(message);
+      }
+    };
+    window.addEventListener("open-jasmine", openChat);
+    return () => window.removeEventListener("open-jasmine", openChat);
+  }, [sendText]);
+
+  function handleSend() {
+    const text = input;
+    setInput("");
+    sendText(text);
   }
 
   return (
@@ -82,20 +118,44 @@ export function ChatWidget() {
         {open ? <X size={24} /> : <MessageCircle size={24} />}
       </button>
 
-      {/* Panel */}
+      {/* Panel — full screen on mobile, floating card on desktop */}
       {open && (
-        <div className="fixed bottom-24 right-5 z-50 flex h-[520px] w-[360px] max-w-[calc(100vw-40px)] flex-col overflow-hidden rounded-[22px] bg-night shadow-[0_24px_60px_-12px_rgba(9,9,13,0.6)]">
-          <div className="flex items-baseline justify-between border-b border-white/10 px-5 py-4">
-            <span className="font-sans text-[14px] font-medium text-[#F4F4EF]">
-              Jasmine
-            </span>
-            <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-lime">
-              brandpop ai · live
-            </span>
+        <div className="fixed inset-0 z-50 flex h-[100dvh] w-full flex-col overflow-hidden bg-night md:inset-auto md:bottom-24 md:right-5 md:h-[520px] md:w-[360px] md:rounded-[22px] md:shadow-[0_24px_60px_-12px_rgba(9,9,13,0.6)]">
+          <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <div className="flex items-baseline gap-3">
+              <span className="font-sans text-[14px] font-medium text-[#F4F4EF]">
+                Jasmine
+              </span>
+              <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-lime">
+                brandpop ai · live
+              </span>
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Close chat"
+              className="text-[#F4F4EF]/60 hover:text-[#F4F4EF] md:hidden"
+            >
+              <X size={20} />
+            </button>
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
             <Bubble role="assistant" content={JASMINE_OPENING} />
+
+            {messages.length === 0 && !busy && (
+              <div className="flex flex-wrap gap-2 pt-1">
+                {STARTERS.map((s) => (
+                  <button
+                    key={s.label}
+                    onClick={() => sendText(s.message)}
+                    className="rounded-full border border-lime/40 px-3.5 py-1.5 font-mono text-[11.5px] text-lime transition-colors hover:bg-lime hover:text-ink"
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {messages.map((m, i) => (
               <Bubble key={i} role={m.role} content={m.content} />
             ))}
@@ -106,7 +166,7 @@ export function ChatWidget() {
             )}
           </div>
 
-          <div className="border-t border-white/10 p-3">
+          <div className="border-t border-white/10 p-3 pb-[max(12px,env(safe-area-inset-bottom))]">
             {ended ? (
               <p className="px-2 py-1 text-center font-mono text-[11px] text-[#F4F4EF]/40">
                 conversation ended
@@ -117,13 +177,13 @@ export function ChatWidget() {
                   ref={inputRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && send()}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   maxLength={1000}
                   placeholder="Ask about pricing, hours, anything…"
-                  className="flex-1 bg-transparent font-sans text-[13.5px] font-light text-[#F4F4EF] placeholder:text-[#F4F4EF]/35 focus:outline-none"
+                  className="flex-1 bg-transparent font-sans text-[16px] font-light text-[#F4F4EF] placeholder:text-[#F4F4EF]/35 focus:outline-none md:text-[13.5px]"
                 />
                 <button
-                  onClick={send}
+                  onClick={handleSend}
                   disabled={busy || !input.trim()}
                   className="rounded-[8px] bg-lime px-3 py-1.5 font-mono text-[11px] font-semibold text-ink disabled:opacity-40"
                 >
