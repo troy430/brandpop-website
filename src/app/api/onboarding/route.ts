@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { notifyOnboardingSubmission } from "@/lib/notify";
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,6 +34,11 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Alert Slack (and Hermes) that a client finished onboarding. Awaited so
+    // the send completes before the serverless function freezes, but it never
+    // throws — a Slack failure must not fail a submission that's already saved.
+    await notifyOnboardingSubmission(body, data.id);
 
     return NextResponse.json(
       {
