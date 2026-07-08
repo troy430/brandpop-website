@@ -22,14 +22,25 @@ export const industries = [
   "other",
 ] as const;
 
+// Matches the A2P / 10DLC business-type categories used downstream in the
+// GHL/TCR registration, so the captured value maps straight through.
 export const businessTypes = [
-  "sole_proprietorship",
-  "llc",
-  "s_corp",
-  "c_corp",
+  "co_operative",
+  "corporation",
+  "llc_or_sole_proprietorship",
+  "non_profit",
   "partnership",
-  "nonprofit",
 ] as const;
+
+// Display labels — single source of truth for the form dropdown and the admin
+// view. Text matches the A2P/TCR registration options exactly.
+export const businessTypeLabels: Record<(typeof businessTypes)[number], string> = {
+  co_operative: "Co-operative",
+  corporation: "Corporation",
+  llc_or_sole_proprietorship: "Limited Liability Company Or Sole-Proprietorship",
+  non_profit: "Non-profit Corporation",
+  partnership: "Partnership",
+};
 
 export const useCases = [
   "lead_reactivation",
