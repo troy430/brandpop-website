@@ -1,4 +1,5 @@
 import { getSupabase } from "@/lib/supabase";
+import { businessTypeLabels } from "@/lib/onboarding/schema";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -274,7 +275,7 @@ export default async function AdminOnboardingPage() {
                         </h3>
                         <div className="space-y-1 text-sm text-text-secondary">
                           {r.a2p.businessType && (
-                            <p><span className="text-text-muted">Type:</span> {r.a2p.businessType}</p>
+                            <p><span className="text-text-muted">Type:</span> {businessTypeLabels[r.a2p.businessType as keyof typeof businessTypeLabels] ?? r.a2p.businessType}</p>
                           )}
                           {r.a2p.employeeCount && (
                             <p><span className="text-text-muted">Employees:</span> {r.a2p.employeeCount}</p>

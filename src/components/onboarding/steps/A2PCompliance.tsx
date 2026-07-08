@@ -1,15 +1,10 @@
 import { Controller } from "react-hook-form";
-import { businessTypes, useCases } from "@/lib/onboarding/schema";
+import { businessTypes, businessTypeLabels } from "@/lib/onboarding/schema";
 import { Input, Select, Textarea, Checkbox } from "@/components/onboarding/FormElements";
 
 const businessTypeOptions = [
   { value: "", label: "Select business type" },
-  { value: "sole_proprietorship", label: "Sole Proprietorship" },
-  { value: "llc", label: "LLC" },
-  { value: "s_corp", label: "S Corporation" },
-  { value: "c_corp", label: "C Corporation" },
-  { value: "partnership", label: "Partnership" },
-  { value: "nonprofit", label: "Nonprofit" },
+  ...businessTypes.map((v) => ({ value: v, label: businessTypeLabels[v] })),
 ];
 
 const useCaseOptions = [
