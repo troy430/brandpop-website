@@ -48,7 +48,10 @@
   --color-accent-hover: #8fcc3f;
   --color-text-primary: var(--ink);
   --color-text-secondary: var(--ink-soft);
-  --color-text-muted: var(--ink-faint);
+  /* Darker than --ink-faint so form placeholders and helper text clear
+     WCAG AA (4.5:1) on the bone/bone-deep form surfaces. The marketing
+     site keeps the lighter --ink-faint for kickers etc. */
+  --color-text-muted: #656558;
 }
 
 body {
