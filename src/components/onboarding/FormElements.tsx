@@ -170,7 +170,7 @@ export function RadioGroup({
             className={cn(
               "rounded-lg border px-4 py-2.5 text-sm font-medium transition-all",
               value === opt.value
-                ? "border-accent bg-accent/10 text-accent"
+                ? "border-accent bg-accent text-text-primary"
                 : "border-border bg-surface text-text-secondary hover:border-text-muted"
             )}
           >
@@ -224,7 +224,7 @@ export function FileUpload({
         />
         {fileName ? (
           <div>
-            <p className="text-sm font-medium text-accent">{fileName}</p>
+            <p className="text-sm font-medium text-text-primary">{fileName}</p>
             <p className="mt-1 text-xs text-text-muted">
               Click to change file
             </p>

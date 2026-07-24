@@ -368,8 +368,8 @@ export function OnboardingForm() {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="w-full max-w-lg text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
-            <CheckCircle className="h-8 w-8 text-accent" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent">
+            <CheckCircle className="h-8 w-8 text-text-primary" />
           </div>
           <h1 className="mt-6 text-3xl font-bold text-text-primary">
             You're all set
@@ -381,19 +381,19 @@ export function OnboardingForm() {
             {isSmsService ? (
               <>
                 <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
                     1
                   </span>
                   A2P registration submitted to carriers (24–48 hours)
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
                     2
                   </span>
                   Campaign messaging crafted and approved by you
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
                     3
                   </span>
                   Trial launch — you'll see results within 48 hours of going live
@@ -402,19 +402,19 @@ export function OnboardingForm() {
             ) : (
               <>
                 <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
                     1
                   </span>
                   GHL account connection and integration setup (1–2 business days)
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
                     2
                   </span>
                   AI configuration, tuned to your business and tone
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-accent">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
                     3
                   </span>
                   Go live — you'll start seeing results within a week

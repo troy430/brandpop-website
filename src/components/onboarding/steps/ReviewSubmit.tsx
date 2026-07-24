@@ -46,7 +46,7 @@ function ReviewSection({
         <button
           type="button"
           onClick={() => onEdit(step)}
-          className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent-hover transition-colors"
+          className="inline-flex items-center gap-1 text-xs text-text-secondary underline underline-offset-2 hover:text-text-primary transition-colors"
         >
           <Edit3 className="h-3 w-3" />
           Edit
@@ -87,7 +87,7 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
           {data.services?.map((s) => (
             <span
               key={s}
-              className="rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent"
+              className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-text-primary"
             >
               {serviceLabels[s]}
             </span>
@@ -125,7 +125,7 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
               href={data.einDocumentUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-accent hover:text-accent-hover transition-colors"
+              className="text-text-primary underline underline-offset-2 hover:text-text-secondary transition-colors"
             >
               View uploaded file
             </a>
@@ -197,7 +197,7 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
                 href={data.leadCsvUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-accent hover:text-accent-hover transition-colors"
+                className="text-text-primary underline underline-offset-2 hover:text-text-secondary transition-colors"
               >
                 View uploaded CSV
               </a>
