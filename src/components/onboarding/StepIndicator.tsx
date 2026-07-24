@@ -36,8 +36,8 @@ export function StepIndicator({ steps, currentStep, completedSteps, onStepClick 
                 <div
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold transition-colors",
-                    isCompleted && "bg-accent text-background",
-                    isCurrent && "border-2 border-accent bg-surface text-accent",
+                    isCompleted && "bg-accent text-text-primary",
+                    isCurrent && "border-2 border-accent bg-accent text-text-primary",
                     isPending && "border border-border bg-surface text-text-muted"
                   )}
                 >
@@ -46,7 +46,7 @@ export function StepIndicator({ steps, currentStep, completedSteps, onStepClick 
                 <span
                   className={cn(
                     "mt-1.5 hidden text-xs font-medium sm:block",
-                    isCurrent ? "text-accent" : "text-text-muted"
+                    isCurrent ? "text-text-primary" : "text-text-muted"
                   )}
                 >
                   {stepLabels[step]}

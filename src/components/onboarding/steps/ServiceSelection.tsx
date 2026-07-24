@@ -79,7 +79,7 @@ export function ServiceSelection({ control }: ServiceSelectionProps) {
                   <div
                     className={cn(
                       "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
-                      isSelected ? "bg-accent text-background" : "bg-surface-elevated text-text-muted"
+                      isSelected ? "bg-accent text-text-primary" : "bg-surface-elevated text-text-muted"
                     )}
                   >
                     <Icon className="h-5 w-5" />
@@ -89,13 +89,13 @@ export function ServiceSelection({ control }: ServiceSelectionProps) {
                       <h3
                         className={cn(
                           "font-semibold",
-                          isSelected ? "text-accent" : "text-text-primary"
+                          isSelected ? "text-text-primary" : "text-text-primary"
                         )}
                       >
                         {config.label}
                       </h3>
                       {isSelected && (
-                        <span className="rounded-full bg-accent/20 px-2 py-0.5 text-xs font-medium text-accent">
+                        <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-text-primary">
                           Selected
                         </span>
                       )}

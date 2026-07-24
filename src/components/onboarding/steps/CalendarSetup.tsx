@@ -134,7 +134,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
                         className={cn(
                           "rounded-lg border px-4 py-2 text-sm font-medium transition-all",
                           isSelected
-                            ? "border-accent bg-accent/10 text-accent"
+                            ? "border-accent bg-accent text-text-primary"
                             : "border-border bg-surface text-text-muted hover:border-text-muted"
                         )}
                       >
