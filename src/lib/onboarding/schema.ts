@@ -50,6 +50,50 @@ export const useCases = [
   "follow_up",
 ] as const;
 
+// Display labels for the remaining stored enums. Same contract as
+// businessTypeLabels: one source of truth for the form dropdowns AND the review
+// screen, which was printing raw stored values ("llc_or_sole_proprietorship",
+// "1k_to_5k") back at the client on the last screen before submit.
+export const useCaseLabels: Record<(typeof useCases)[number], string> = {
+  lead_reactivation: "Lead Reactivation",
+  appointment_reminders: "Appointment Reminders",
+  customer_care: "Customer Care",
+  marketing_promotions: "Marketing / Promotions",
+  follow_up: "Follow-up",
+};
+
+export const monthlyVolumes = [
+  "under_1k",
+  "1k_to_5k",
+  "5k_to_10k",
+  "10k_to_50k",
+  "50k_plus",
+] as const;
+
+export const monthlyVolumeLabels: Record<string, string> = {
+  under_1k: "Under 1,000 / month",
+  "1k_to_5k": "1,000 – 5,000 / month",
+  "5k_to_10k": "5,000 – 10,000 / month",
+  "10k_to_50k": "10,000 – 50,000 / month",
+  "50k_plus": "50,000+ / month",
+};
+
+export const notificationTimingLabels: Record<string, string> = {
+  immediate: "Immediate — as soon as it happens",
+  digest: "Daily digest",
+  weekly: "Weekly summary",
+};
+
+// serviceLabels previously lived in ReviewSubmit and was missing live_chat and
+// reputation_management, so selecting either rendered "undefined" on review.
+export const serviceLabels: Record<(typeof serviceTypes)[number], string> = {
+  dbr: "Database Reactivation",
+  ai_voice: "AI Voice Receptionist",
+  speed_to_lead: "Speed to Lead",
+  live_chat: "Live Chat",
+  reputation_management: "Reputation Management",
+};
+
 export const daysOfWeek = [
   "monday",
   "tuesday",
@@ -59,6 +103,16 @@ export const daysOfWeek = [
   "saturday",
   "sunday",
 ] as const;
+
+export const dayLabels: Record<(typeof daysOfWeek)[number], string> = {
+  monday: "Mon",
+  tuesday: "Tue",
+  wednesday: "Wed",
+  thursday: "Thu",
+  friday: "Fri",
+  saturday: "Sat",
+  sunday: "Sun",
+};
 
 export const contactSchema = z.object({
   name: z.string().min(1, "Name is required"),

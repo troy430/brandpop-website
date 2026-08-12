@@ -25,7 +25,7 @@ import { LeadUpload } from "@/components/onboarding/steps/LeadUpload";
 import { ReviewSubmit } from "@/components/onboarding/steps/ReviewSubmit";
 import { getIndustryTemplates, fillTemplate } from "@/lib/onboarding/templates";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const STORAGE_KEY = "brandpop_onboarding_progress";
 
@@ -164,6 +164,38 @@ function collectErrorMessages(errors: any, prefix = ""): { path: string; message
   }
   return results;
 }
+const pad = (n: number) => String(n).padStart(2, "0");
+
+function Wordmark() {
+  return (
+    <span className="font-sans text-lg font-semibold tracking-tight text-ink">
+      brandpop<span className="star-mark">*</span>
+    </span>
+  );
+}
+
+/*
+  The asterisk footnote system — the brand device. The wordmark's own asterisk
+  is footnote zero, so the pricing note has to be the first one that resolves.
+  Lowercase, mono, plainspoken, never weasel.
+*/
+function Footnotes() {
+  return (
+    // --ink-faint is only 3.1:1 on bone. These footnotes carry pricing and data
+    // terms at 12px, so they take the darker muted value that clears AA.
+    <div className="mt-12 space-y-2 border-t border-dashed border-rule pt-4 font-mono text-xs leading-relaxed text-text-muted">
+      <p>
+        <span className="star-mark">*</span> database reactivation is the only
+        service you pay per booked appointment. everything else is flat monthly.
+      </p>
+      <p>
+        <span className="star-mark">*</span> hipaa compliant, baa available on
+        request. your data is never sold or shared.
+      </p>
+    </div>
+  );
+}
+
 export function OnboardingForm() {
   const searchParams = useSearchParams();
   const clientSlug = searchParams.get("client") || "new-client";
@@ -364,67 +396,52 @@ export function OnboardingForm() {
   };
 
   if (isSubmitted) {
-    const isSmsService = showA2P;
+    // Ledger rows: mono index, what happens, right-aligned mono term.
+    const nextSteps = showA2P
+      ? [
+          { label: "A2P registration submitted to carriers", term: "24–48 hrs" },
+          { label: "Campaign messaging written, then approved by you", term: "you approve" },
+          { label: "Trial launch", term: "results in 48 hrs" },
+        ]
+      : [
+          { label: "GHL account connection and integration setup", term: "1–2 days" },
+          { label: "AI configured and tuned to your business and tone", term: "we handle it" },
+          { label: "Go live", term: "results in a week" },
+        ];
+
     return (
-      <div className="flex min-h-screen items-center justify-center px-4">
-        <div className="w-full max-w-lg text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent">
-            <CheckCircle className="h-8 w-8 text-text-primary" />
+      <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl">
+          <Wordmark />
+          <div className="exhibit-card mt-6 p-6 sm:p-8">
+            <div className="kicker">submitted</div>
+            <h1 className="mt-4 font-serif text-[clamp(28px,3.4vw,40px)] font-normal leading-[1.1] tracking-[-0.015em] text-ink">
+              That’s everything we need.
+            </h1>
+            <p className="mt-3 max-w-xl text-ink-soft">
+              Nothing else is required from you. We build it, run it, and monitor it.
+              Here’s the order it happens in.
+            </p>
+            <ol className="mt-8 border-t border-ink">
+              {nextSteps.map((step, i) => (
+                <li
+                  key={step.label}
+                  className="flex items-baseline gap-4 border-b border-rule py-4"
+                >
+                  <span className="font-mono text-xs text-ink-faint">{pad(i + 1)}</span>
+                  <span className="flex-1 text-ink">{step.label}</span>
+                  <span className="shrink-0 font-mono text-xs text-ink-soft">
+                    {step.term}
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-6 font-mono text-xs text-text-muted">
+              questions? reply to your confirmation email — it comes straight to
+              a person.
+            </p>
           </div>
-          <h1 className="mt-6 text-3xl font-bold text-text-primary">
-            You're all set
-          </h1>
-          <p className="mt-3 text-text-secondary">
-            We received everything. Here's what happens next:
-          </p>
-          <ol className="mt-6 space-y-3 text-left text-sm text-text-secondary">
-            {isSmsService ? (
-              <>
-                <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
-                    1
-                  </span>
-                  A2P registration submitted to carriers (24–48 hours)
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
-                    2
-                  </span>
-                  Campaign messaging crafted and approved by you
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
-                    3
-                  </span>
-                  Trial launch — you'll see results within 48 hours of going live
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
-                    1
-                  </span>
-                  GHL account connection and integration setup (1–2 business days)
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
-                    2
-                  </span>
-                  AI configuration, tuned to your business and tone
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-text-primary">
-                    3
-                  </span>
-                  Go live — you'll start seeing results within a week
-                </li>
-              </>
-            )}
-          </ol>
-          <p className="mt-8 text-xs text-text-muted">
-            Questions? Reply to your confirmation email or contact us directly.
-          </p>
+          <Footnotes />
         </div>
       </div>
     );
@@ -433,29 +450,31 @@ export function OnboardingForm() {
   return (
     <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-text-primary sm:text-3xl">
-            Get started with brandpop*
+        {/* Header — left-aligned editorial, never centered. */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between gap-4">
+            <Wordmark />
+            <button
+              type="button"
+              onClick={() => {
+                if (confirm("Start over? This will clear all your progress.")) {
+                  localStorage.removeItem(STORAGE_KEY);
+                  window.location.reload();
+                }
+              }}
+              className="font-mono text-xs text-ink-faint underline underline-offset-2 hover:text-ink"
+            >
+              start over
+            </button>
+          </div>
+          <div className="kicker mt-6">client onboarding</div>
+          <h1 className="mt-4 font-serif text-[clamp(28px,3.4vw,40px)] font-normal leading-[1.1] tracking-[-0.015em] text-ink">
+            Tell us about the business. We’ll build the rest.
           </h1>
-          <p className="mt-2 text-text-secondary">
-            Complete this onboarding in about 8 minutes. Your progress saves automatically.
+          <p className="mt-3 max-w-xl text-ink-soft">
+            About <span className="font-mono">8 minutes</span>. Your progress
+            saves automatically.
           </p>
-          <p className="mt-2 text-xs text-text-muted">
-            HIPAA compliant · BAA available · Your data is never sold or shared
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              if (confirm("Start over? This will clear all your progress.")) {
-                localStorage.removeItem(STORAGE_KEY);
-                window.location.reload();
-              }
-            }}
-            className="mt-3 text-xs text-text-muted underline hover:text-text-secondary"
-          >
-            Start over
-          </button>
         </div>
 
         {/* Progress */}
@@ -466,7 +485,9 @@ export function OnboardingForm() {
         {/* Form */}
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit as any, onInvalid)}>
-            <div className="rounded-2xl border border-border bg-surface-elevated p-6 sm:p-8">
+            {/* exhibit-card: --card ground, ink border, hard offset shadow.
+                Square-cornered — cards on paper don't have soft radii. */}
+            <div className="exhibit-card p-6 sm:p-8">
               {stepError && (
                 <div className="mb-6 rounded-xl border border-error bg-error/10 p-4 text-sm text-error">
                   {stepError}
@@ -513,6 +534,7 @@ export function OnboardingForm() {
             )}
           </form>
         </FormProvider>
+        <Footnotes />
       </div>
     </div>
   );

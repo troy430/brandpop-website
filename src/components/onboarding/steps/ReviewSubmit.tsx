@@ -1,4 +1,15 @@
-import { OnboardingData, industries, needsA2P, needsLeads, needsCalendar } from "@/lib/onboarding/schema";
+import {
+  OnboardingData,
+  needsA2P,
+  needsLeads,
+  needsCalendar,
+  serviceLabels,
+  businessTypeLabels,
+  useCaseLabels,
+  monthlyVolumeLabels,
+  notificationTimingLabels,
+  dayLabels,
+} from "@/lib/onboarding/schema";
 import { Button } from "@/components/ui/button";
 import { Edit3 } from "lucide-react";
 
@@ -7,12 +18,6 @@ interface ReviewSubmitProps {
   onEditStep: (step: string) => void;
   isSubmitting: boolean;
 }
-
-const serviceLabels: Record<string, string> = {
-  dbr: "Database Reactivation",
-  ai_voice: "AI Voice Receptionist",
-  speed_to_lead: "Speed to Lead",
-};
 
 const industryLabels: Record<string, string> = {
   solar: "Solar",
@@ -40,9 +45,9 @@ function ReviewSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-5">
+    <div className="rounded-xl border border-rule p-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-text-primary">{title}</h3>
+        <h3 className="kicker">{title}</h3>
         <button
           type="button"
           onClick={() => onEdit(step)}
@@ -59,12 +64,16 @@ function ReviewSection({
   );
 }
 
+/*
+  The review screen is the ledger of what the client typed, so the values set in
+  mono — "if a number matters, it's mono" (DESIGN.md). The label stays sans.
+*/
 function LabelValue({ label, value }: { label: string; value?: string | number | null }) {
   if (value === undefined || value === null || value === "") return null;
   return (
     <p>
       <span className="text-text-muted">{label}:</span>{" "}
-      <span className="text-text-primary">{value}</span>
+      <span className="font-mono text-ink">{value}</span>
     </p>
   );
 }
@@ -76,7 +85,7 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-text-primary">Review & submit</h2>
+        <h2 className="font-serif text-[clamp(24px,2.6vw,32px)] font-normal leading-[1.12] tracking-[-0.015em] text-ink">Review & submit</h2>
         <p className="mt-1 text-text-secondary">
           Double-check everything. You can edit any section before submitting.
         </p>
@@ -87,7 +96,7 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
           {data.services?.map((s) => (
             <span
               key={s}
-              className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-text-primary"
+              className="rounded-[3px] border border-ink bg-lime px-3 py-1 font-mono text-xs text-ink"
             >
               {serviceLabels[s]}
             </span>
@@ -137,10 +146,19 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
 
       {showA2P && (
         <ReviewSection title="A2P Compliance" step="a2p" onEdit={onEditStep}>
-          <LabelValue label="Business type" value={data.a2p?.businessType} />
+          <LabelValue
+            label="Business type"
+            value={data.a2p?.businessType && businessTypeLabels[data.a2p.businessType]}
+          />
           <LabelValue label="Employees" value={data.a2p?.employeeCount} />
-          <LabelValue label="Use case" value={data.a2p?.useCase} />
-          <LabelValue label="Monthly volume" value={data.a2p?.monthlyVolume} />
+          <LabelValue
+            label="Use case"
+            value={data.a2p?.useCase && useCaseLabels[data.a2p.useCase]}
+          />
+          <LabelValue
+            label="Monthly volume"
+            value={data.a2p?.monthlyVolume && monthlyVolumeLabels[data.a2p.monthlyVolume]}
+          />
           <LabelValue label="Existing number to port" value={data.a2p?.smsPhoneNumber} />
           <LabelValue label="Call forwarding" value={data.a2p?.callForwardingNumber} />
           <LabelValue
@@ -162,7 +180,7 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
           <LabelValue label="Buffer" value={`${data.calendar?.bufferTime} min`} />
           <LabelValue
             label="Days"
-            value={data.calendar?.availableDays?.join(", ")}
+            value={data.calendar?.availableDays?.map((d) => dayLabels[d]).join(", ")}
           />
           <LabelValue
             label="Hours"
@@ -185,7 +203,13 @@ export function ReviewSubmit({ data, onEditStep, isSubmitting }: ReviewSubmitPro
           </p>
         ))}
         <LabelValue label="Methods" value={data.notifications?.methods?.join(", ")} />
-        <LabelValue label="Timing" value={data.notifications?.timing} />
+        <LabelValue
+          label="Timing"
+          value={
+            data.notifications?.timing &&
+            notificationTimingLabels[data.notifications.timing]
+          }
+        />
       </ReviewSection>
 
       {showLeads && data.leads && (

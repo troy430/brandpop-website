@@ -1,35 +1,50 @@
-import { Control, Controller } from "react-hook-form";
-import { OnboardingData, serviceTypes } from "@/lib/onboarding/schema";
+import { Controller } from "react-hook-form";
+import { serviceTypes } from "@/lib/onboarding/schema";
 import { cn } from "@/lib/utils";
-import { Database, Phone, Zap, MessageSquare, Star } from "lucide-react";
+import { Check } from "lucide-react";
 
+/*
+  Ledger rows per DESIGN.md: mono index, serif name, sans description,
+  right-aligned mono term column. The lucide icon tiles are gone — the design
+  system has no icon-in-a-rounded-square vocabulary, and they read as template.
+
+  The term column states the pricing model up front. DBR is the only
+  performance-priced service, so it gets --booked; the rest are flat monthly.
+*/
 const serviceConfig = {
   dbr: {
     label: "Database Reactivation",
     description: "AI-powered SMS outreach that reactivates cold leads and past customers.",
-    icon: Database,
+    term: "pay per booked appt",
+    performancePriced: true,
   },
   ai_voice: {
     label: "AI Voice Receptionist",
     description: "Never miss a call. AI answers, qualifies, and books appointments 24/7.",
-    icon: Phone,
+    term: "flat monthly",
+    performancePriced: false,
   },
   speed_to_lead: {
     label: "Speed to Lead",
     description: "Instant response to new leads. First contact in under 60 seconds.",
-    icon: Zap,
+    term: "flat monthly",
+    performancePriced: false,
   },
   live_chat: {
     label: "Live Chat",
     description: "AI-powered website chat that captures visitors who never fill out a form.",
-    icon: MessageSquare,
+    term: "flat monthly",
+    performancePriced: false,
   },
   reputation_management: {
     label: "Reputation Management",
     description: "Automatically ask happy customers for Google reviews after every visit.",
-    icon: Star,
+    term: "flat monthly",
+    performancePriced: false,
   },
 };
+
+const pad = (n: number) => String(n).padStart(2, "0");
 
 interface ServiceSelectionProps {
   control: any;
@@ -39,10 +54,10 @@ export function ServiceSelection({ control }: ServiceSelectionProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-text-primary">
+        <h2 className="font-serif text-[clamp(24px,2.6vw,32px)] font-normal leading-[1.12] tracking-[-0.015em] text-ink">
           Which services are we setting up?
         </h2>
-        <p className="mt-1 text-text-secondary">
+        <p className="mt-2 text-ink-soft">
           Select all that apply. You can add more services later.
         </p>
       </div>
@@ -51,64 +66,69 @@ export function ServiceSelection({ control }: ServiceSelectionProps) {
         name="services"
         control={control}
         render={({ field, fieldState }) => (
-          <div className="space-y-3">
-            {serviceTypes.map((service) => {
-              const config = serviceConfig[service];
-              const Icon = config.icon;
-              const isSelected = field.value?.includes(service);
+          <div>
+            <div className="border-t border-ink">
+              {serviceTypes.map((service, index) => {
+                const config = serviceConfig[service];
+                const isSelected = field.value?.includes(service);
 
-              return (
-                <button
-                  key={service}
-                  type="button"
-                  onClick={() => {
-                    const current = field.value ?? [];
-                    if (isSelected) {
-                      field.onChange(current.filter((s: string) => s !== service));
-                    } else {
-                      field.onChange([...current, service]);
-                    }
-                  }}
-                  className={cn(
-                    "flex w-full items-start gap-4 rounded-xl border p-5 text-left transition-all",
-                    isSelected
-                      ? "border-accent bg-accent/5"
-                      : "border-border bg-surface hover:border-text-muted"
-                  )}
-                >
-                  <div
+                return (
+                  <button
+                    key={service}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => {
+                      const current = field.value ?? [];
+                      if (isSelected) {
+                        field.onChange(current.filter((s: string) => s !== service));
+                      } else {
+                        field.onChange([...current, service]);
+                      }
+                    }}
                     className={cn(
-                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
-                      isSelected ? "bg-accent text-text-primary" : "bg-surface-elevated text-text-muted"
+                      "flex w-full items-baseline gap-4 border-b border-rule px-2 py-4 text-left transition-colors",
+                      isSelected ? "bg-lime/25" : "hover:bg-lime/10"
                     )}
                   >
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3
+                    <span className="w-6 shrink-0 font-mono text-xs text-ink-faint">
+                      {isSelected ? (
+                        <Check className="h-4 w-4 text-ink" aria-label="selected" />
+                      ) : (
+                        pad(index + 1)
+                      )}
+                    </span>
+                    <span className="flex-1">
+                      <span className="block font-serif text-lg text-ink">
+                        {config.label}
+                      </span>
+                      <span className="mt-1 block text-sm text-ink-soft">
+                        {config.description}
+                      </span>
+                      <span
                         className={cn(
-                          "font-semibold",
-                          isSelected ? "text-text-primary" : "text-text-primary"
+                          "mt-1.5 block font-mono text-xs sm:hidden",
+                          config.performancePriced ? "text-booked" : "text-ink-soft"
                         )}
                       >
-                        {config.label}
-                      </h3>
-                      {isSelected && (
-                        <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-text-primary">
-                          Selected
-                        </span>
+                        {config.term}
+                      </span>
+                    </span>
+                    <span
+                      className={cn(
+                        "hidden shrink-0 font-mono text-xs sm:block",
+                        config.performancePriced ? "text-booked" : "text-ink-soft"
                       )}
-                    </div>
-                    <p className="mt-1 text-sm text-text-secondary">
-                      {config.description}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
+                    >
+                      {config.term}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
             {fieldState.error && (
-              <p className="text-sm text-error">{fieldState.error.message}</p>
+              <p className="mt-3 font-mono text-xs text-error">
+                {fieldState.error.message}
+              </p>
             )}
           </div>
         )}

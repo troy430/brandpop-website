@@ -63,7 +63,7 @@ export function BusinessProfile({ control }: BusinessProfileProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-text-primary">Business profile</h2>
+        <h2 className="font-serif text-[clamp(24px,2.6vw,32px)] font-normal leading-[1.12] tracking-[-0.015em] text-ink">Business profile</h2>
         <p className="mt-1 text-text-secondary">
           We need this for A2P registration and to tailor your campaigns.
         </p>
@@ -215,7 +215,7 @@ export function BusinessProfile({ control }: BusinessProfileProps) {
           control={control}
           render={({ field }) => (
             <Input
-              label="EIN (optional — we'll extract from your upload)"
+              label="EIN (optional — we’ll extract from your upload)"
               placeholder="XX-XXXXXXX"
               {...field}
             />
@@ -238,8 +238,8 @@ export function BusinessProfile({ control }: BusinessProfileProps) {
 
       {/* Service-specific fields */}
       {(needsVoiceAI || needsLiveChat || needsReputation) && (
-        <div className="rounded-xl border border-border bg-surface p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-text-primary">Service setup</h3>
+        <div className="rounded-xl border border-rule p-5 space-y-4">
+          <h3 className="kicker">Service setup</h3>
 
           {needsVoiceAI && (
             <Controller
@@ -279,7 +279,7 @@ export function BusinessProfile({ control }: BusinessProfileProps) {
           )}
           {needsLiveChat && (
             <p className="text-xs text-text-muted -mt-2">
-              We'll send you the right installation instructions for your platform.
+              We’ll send you the right installation instructions for your platform.
             </p>
           )}
 
@@ -306,8 +306,8 @@ export function BusinessProfile({ control }: BusinessProfileProps) {
         </div>
       )}
 
-      <div className="rounded-xl border border-border bg-surface p-5">
-        <h3 className="text-sm font-semibold text-text-primary">Primary contact</h3>
+      <div className="rounded-xl border border-rule p-5">
+        <h3 className="kicker">Primary contact</h3>
         <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Controller
             name="contacts.primary.name"

@@ -15,6 +15,9 @@
   --night: #09090d;
   --night-soft: #23232e;
   --dead: #e4572e;
+  /* Darkened --dead for error TEXT. --dead itself is only 3.6:1 on --card,
+     which clears WCAG for borders/marks (1.4.11) but not small text. */
+  --dead-deep: #b3421c;
   --booked: #1e7f4f;
   --rule: rgba(20, 20, 16, 0.18);
   --card: #fdfcf7;
@@ -30,6 +33,7 @@
   --color-night: var(--night);
   --color-night-soft: var(--night-soft);
   --color-dead: var(--dead);
+  --color-dead-deep: var(--dead-deep);
   --color-booked: var(--booked);
   --color-rule: var(--rule);
   --color-card: var(--card);
@@ -52,6 +56,10 @@
      WCAG AA (4.5:1) on the bone/bone-deep form surfaces. The marketing
      site keeps the lighter --ink-faint for kickers etc. */
   --color-text-muted: #656558;
+  /* `text-error`/`border-error`/`bg-error/10` were used across onboarding but
+     never defined, so they emitted no CSS and validation errors rendered as
+     plain ink. Mapped onto the ledger red. */
+  --color-error: var(--dead-deep);
 }
 
 body {

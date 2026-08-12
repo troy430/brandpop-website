@@ -25,7 +25,7 @@ export function ContactsSetup({ control }: ContactsSetupProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-text-primary">Contacts & notifications</h2>
+        <h2 className="font-serif text-[clamp(24px,2.6vw,32px)] font-normal leading-[1.12] tracking-[-0.015em] text-ink">Contacts & notifications</h2>
         <p className="mt-1 text-text-secondary">
           Who should receive alerts when appointments are booked or leads reply?
         </p>
@@ -33,7 +33,7 @@ export function ContactsSetup({ control }: ContactsSetupProps) {
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-text-primary">
+          <h3 className="kicker">
             Notification recipients
           </h3>
           <Button
@@ -52,7 +52,7 @@ export function ContactsSetup({ control }: ContactsSetupProps) {
         {fields.map((field, index) => (
           <div
             key={field.id}
-            className="rounded-xl border border-border bg-surface p-4"
+            className="rounded-xl border border-rule p-4"
           >
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <Controller
@@ -109,9 +109,9 @@ export function ContactsSetup({ control }: ContactsSetupProps) {
         ))}
       </div>
 
-      <div className="rounded-xl border border-border bg-surface p-5">
-        <h3 className="text-sm font-semibold text-text-primary mb-3">
-          Notification methods<span className="text-error ml-0.5">*</span>
+      <div className="rounded-xl border border-rule p-5">
+        <h3 className="kicker mb-3">
+          Notification methods<span className="star-mark ml-1" aria-hidden="true">*</span>
         </h3>
         <Controller
           name="notifications.methods"
@@ -141,7 +141,7 @@ export function ContactsSetup({ control }: ContactsSetupProps) {
                 })}
               </div>
               {fieldState.error && (
-                <p className="mt-1 text-xs text-error">{fieldState.error.message}</p>
+                <p className="mt-2 font-mono text-xs text-error">{fieldState.error.message}</p>
               )}
             </div>
           )}

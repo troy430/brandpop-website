@@ -32,7 +32,7 @@ export function LeadUpload({ control }: LeadUploadProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-text-primary">Lead data</h2>
+        <h2 className="font-serif text-[clamp(24px,2.6vw,32px)] font-normal leading-[1.12] tracking-[-0.015em] text-ink">Lead data</h2>
         <p className="mt-1 text-text-secondary">
           Only needed for Database Reactivation. Skip this step if you&rsquo;re not reactivating a lead list.
         </p>

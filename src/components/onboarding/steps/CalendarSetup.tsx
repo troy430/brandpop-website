@@ -1,18 +1,8 @@
 import { Control, Controller, useFormContext } from "react-hook-form";
-import { OnboardingData, daysOfWeek, calendarRequired } from "@/lib/onboarding/schema";
+import { OnboardingData, daysOfWeek, dayLabels, calendarRequired } from "@/lib/onboarding/schema";
 import { Input, Checkbox } from "@/components/onboarding/FormElements";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
-
-const dayLabels: Record<(typeof daysOfWeek)[number], string> = {
-  monday: "Mon",
-  tuesday: "Tue",
-  wednesday: "Wed",
-  thursday: "Thu",
-  friday: "Fri",
-  saturday: "Sat",
-  sunday: "Sun",
-};
 
 interface CalendarSetupProps {
   control: any;
@@ -26,7 +16,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-text-primary">Calendar setup</h2>
+        <h2 className="font-serif text-[clamp(24px,2.6vw,32px)] font-normal leading-[1.12] tracking-[-0.015em] text-ink">Calendar setup</h2>
         <p className="mt-1 text-text-secondary">
           Connect your availability so we can book appointments directly into your calendar.
         </p>
@@ -108,8 +98,8 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text-secondary mb-2">
-            Available days{required && <span className="text-error ml-0.5">*</span>}
+          <label className="mb-2 block font-mono text-xs text-ink-soft">
+            Available days{required && <span className="star-mark ml-1" aria-hidden="true">*</span>}
           </label>
           <Controller
             name="calendar.availableDays"
@@ -132,10 +122,10 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
                           }
                         }}
                         className={cn(
-                          "rounded-lg border px-4 py-2 text-sm font-medium transition-all",
+                          "rounded-[3px] border px-4 py-2 text-sm font-medium transition-all duration-150 focus:outline-none focus:ring-[3px] focus:ring-lime",
                           isSelected
-                            ? "border-accent bg-accent text-text-primary"
-                            : "border-border bg-surface text-text-muted hover:border-text-muted"
+                            ? "border-ink bg-lime text-ink shadow-[2px_2px_0_var(--ink)]"
+                            : "border-rule bg-card text-ink-soft hover:border-ink hover:text-ink"
                         )}
                       >
                         {dayLabels[day]}
@@ -144,7 +134,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
                   })}
                 </div>
                 {fieldState.error && (
-                  <p className="mt-1 text-xs text-error">{fieldState.error.message}</p>
+                  <p className="mt-2 font-mono text-xs text-error">{fieldState.error.message}</p>
                 )}
               </div>
             )}
@@ -193,9 +183,9 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
         />
       </div>
 
-      <div className="rounded-xl border border-border bg-surface p-5">
-        <h3 className="text-sm font-semibold text-text-primary mb-3">
-          Appointment types{required && <span className="text-error ml-0.5">*</span>}
+      <div className="rounded-xl border border-rule p-5">
+        <h3 className="kicker mb-3">
+          Appointment types{required && <span className="star-mark ml-1" aria-hidden="true">*</span>}
         </h3>
         <div className="space-y-3">
           <Controller
@@ -222,7 +212,7 @@ export function CalendarSetup({ control }: CalendarSetupProps) {
                   );
                 })}
                 {fieldState.error && (
-                  <p className="text-xs text-error">{fieldState.error.message}</p>
+                  <p className="font-mono text-xs text-error">{fieldState.error.message}</p>
                 )}
               </div>
             )}
