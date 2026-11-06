@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s | Brandpop*",
   },
   description:
-    "Brandpop answers, follows up, and books your leads by text, voice, and chat — 24/7, in your name. Database reactivation is pay-per-booked-appointment: $0 until it works.",
+    "Brandpop answers, follows up, and books your leads by text, voice, and chat — 24/7, in your name. Database reactivation is priced per result: a campaign fee, then $300 per booked appointment.",
   keywords: [
     "AI front desk",
     "database reactivation",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Brandpop* — Fully managed AI front desk",
     description:
-      "We build it, run it, monitor it 24/7, and send you the report. Database reactivation is pay-per-booked-appointment: $0 until it works.",
+      "We build it, run it, monitor it 24/7, and send you the report. Database reactivation is priced per result: a campaign fee, then $300 per booked appointment.",
     url: SITE.url,
     siteName: "Brandpop",
     type: "website",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Brandpop* — Fully managed AI front desk",
     description:
-      "AI that answers, follows up, and books your leads 24/7. Pay-per-booked-appointment database reactivation.",
+      "AI that answers, follows up, and books your leads 24/7. Database reactivation: a campaign fee, then $300 per booked appointment.",
   },
   robots: { index: true, follow: true },
 };
