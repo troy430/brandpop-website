@@ -3,6 +3,9 @@ import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { FactsStrip } from "@/components/sections/FactsStrip";
 import { ServicesLedger } from "@/components/sections/ServicesLedger";
+import { ChoiceTable } from "@/components/sections/ChoiceTable";
+import { InstallOffer } from "@/components/sections/InstallOffer";
+import { FrontDeskPartner } from "@/components/sections/FrontDeskPartner";
 import { TryItLive } from "@/components/sections/TryItLive";
 import { TheMath } from "@/components/sections/TheMath";
 import { OnboardingCta } from "@/components/sections/OnboardingCta";
@@ -16,6 +19,9 @@ export default function Home() {
         <Hero />
         <FactsStrip />
         <ServicesLedger />
+        <ChoiceTable />
+        <InstallOffer />
+        <FrontDeskPartner />
         <TryItLive />
         <TheMath />
         <OnboardingCta />

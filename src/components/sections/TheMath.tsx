@@ -4,13 +4,21 @@ import { useState } from "react";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
+function campaignFee(leads: number) {
+  if (leads <= 2000) return 2500;
+  if (leads <= 7500) return 5000;
+  return 7500;
+}
+
 export function TheMath() {
-  const [leads, setLeads] = useState(1000);
-  const [value, setValue] = useState(500);
-  const [rate, setRate] = useState(6);
+  const [leads, setLeads] = useState(2000);
+  const [value, setValue] = useState(10000);
+  const [rate, setRate] = useState(1);
+  const [close, setClose] = useState(25);
 
   const appts = Math.round((leads * rate) / 100);
-  const revenue = Math.round(appts * 0.5 * value);
+  const revenue = Math.round(appts * (close / 100) * value);
+  const cost = campaignFee(leads) + appts * 300;
 
   return (
     <section
@@ -22,8 +30,8 @@ export function TheMath() {
         We’d rather show you the math than a brochure.
       </h2>
       <p className="mb-[52px] max-w-[58ch] text-[16.5px] text-ink-soft">
-        Drag the sliders. The rebook rate is an industry benchmark* — we’d
-        rather you use conservative numbers and be surprised later.
+        Drag the sliders. The booking rate is our planning rate* — we’d
+        rather you use a conservative number and be surprised later.
       </p>
 
       <div className="exhibit-card max-w-[980px] p-7 md:p-[52px]">
@@ -60,7 +68,7 @@ export function TheMath() {
                 htmlFor="calc-value"
                 className="mb-3 flex items-baseline justify-between font-mono text-[12px] uppercase tracking-[0.1em] text-ink-soft"
               >
-                average customer value
+                average job value
                 <output className="text-[18px] font-semibold normal-case tracking-normal text-ink">
                   ${fmt(value)}
                 </output>
@@ -69,20 +77,20 @@ export function TheMath() {
                 id="calc-value"
                 className="calc-range"
                 type="range"
-                min={100}
-                max={5000}
-                step={50}
+                min={1000}
+                max={25000}
+                step={500}
                 value={value}
                 onChange={(e) => setValue(+e.target.value)}
               />
             </div>
 
-            <div>
+            <div className="mb-8">
               <label
                 htmlFor="calc-rate"
                 className="mb-3 flex items-baseline justify-between font-mono text-[12px] uppercase tracking-[0.1em] text-ink-soft"
               >
-                rebook rate (benchmark*)
+                booking rate (planning rate*)
                 <output className="text-[18px] font-semibold normal-case tracking-normal text-ink">
                   {rate}%
                 </output>
@@ -91,11 +99,33 @@ export function TheMath() {
                 id="calc-rate"
                 className="calc-range"
                 type="range"
-                min={2}
-                max={12}
-                step={1}
+                min={0.5}
+                max={4}
+                step={0.5}
                 value={rate}
                 onChange={(e) => setRate(+e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="calc-close"
+                className="mb-3 flex items-baseline justify-between font-mono text-[12px] uppercase tracking-[0.1em] text-ink-soft"
+              >
+                close rate
+                <output className="text-[18px] font-semibold normal-case tracking-normal text-ink">
+                  {close}%
+                </output>
+              </label>
+              <input
+                id="calc-close"
+                className="calc-range"
+                type="range"
+                min={10}
+                max={50}
+                step={5}
+                value={close}
+                onChange={(e) => setClose(+e.target.value)}
               />
             </div>
           </div>
@@ -113,7 +143,7 @@ export function TheMath() {
             </div>
             <div className="flex items-baseline justify-between border-b border-dashed border-rule py-[18px]">
               <span className="max-w-[20ch] font-mono text-[12px] uppercase tracking-[0.1em] text-ink-faint">
-                revenue if half become customers
+                revenue at {close}% close
               </span>
               <span className="font-mono text-[26px] font-semibold tracking-[-0.02em] text-booked md:text-[40px]">
                 ${fmt(revenue)}
@@ -121,23 +151,22 @@ export function TheMath() {
             </div>
             <div className="flex items-baseline justify-between py-[18px]">
               <span className="max-w-[20ch] font-mono text-[12px] uppercase tracking-[0.1em] text-ink-faint">
-                your up-front cost
+                your cost
               </span>
               <span className="bg-lime px-2.5 font-mono text-[26px] font-semibold tracking-[-0.02em] text-ink md:text-[40px]">
-                $0.00
+                ${fmt(cost)}
               </span>
             </div>
           </div>
         </div>
 
         <p className="mt-9 border-t border-dashed border-rule pt-5 font-mono text-[12.5px] leading-[1.9] text-ink-soft">
-          * benchmark rates drawn from industry database-reactivation case data,
-          not our client roster — we’re a young company and we’d rather tell you
-          that than borrow someone else’s numbers.
-          <br />
-          your first ~500 leads are free to reactivate. after that, pricing is
-          performance-based: per booked appointment or a share of what it
-          generates. the leads that don’t respond cost you nothing.
+          <span className="star-mark">*</span> that 1% is a planning rate, not
+          a promise. it’s what we expect from a decent list — real estimates
+          given to real people, not a pile of names nobody recognizes. a
+          stale list will do worse. a warm list can do better. either way,
+          the per-appointment fee only exists when an appointment actually
+          books.
         </p>
       </div>
     </section>

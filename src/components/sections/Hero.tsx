@@ -112,7 +112,9 @@ export function Hero() {
 
         <p className="font-mono text-[13px] text-ink-soft">
           <span className="star-mark">*</span>&nbsp; database reactivation is
-          pay-per-booked-appointment. $0 until it works.
+          priced per result: a campaign fee to build and launch, then $300
+          for every appointment we book. the fee is what makes it real — for
+          both of us.
         </p>
       </div>
 

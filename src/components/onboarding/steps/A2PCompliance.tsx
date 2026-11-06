@@ -36,7 +36,7 @@ export function A2PCompliance({ control }: A2PComplianceProps) {
       <div>
         <h2 className="font-serif text-[clamp(24px,2.6vw,32px)] font-normal leading-[1.12] tracking-[-0.015em] text-ink">A2P compliance setup</h2>
         <p className="mt-1 text-text-secondary">
-          Required for all business SMS in the US. Carrier approval takes 24–48 hours.
+          Required for all business SMS in the US. Carrier approval takes 3–5 business days.
         </p>
       </div>
 
