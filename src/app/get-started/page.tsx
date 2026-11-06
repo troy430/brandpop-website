@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ClipboardList, MessageSquare, Zap, Rocket, Shield, Clock, FileCheck } from "lucide-react";
+import { ArrowRight, ClipboardList, MessageSquare, Zap, Rocket, DollarSign, Clock, FileCheck } from "lucide-react";
 import Link from "next/link";
 
 const steps = [
@@ -35,28 +35,31 @@ const steps = [
   },
   {
     number: "05",
-    title: "Go live in 48 hours",
+    title: "We launch, you watch it book",
     description:
-      "Once approved, campaigns launch. You start seeing re-engaged leads and booked appointments within 48 hours.",
+      "Once your registration clears and you've approved the messaging, campaigns launch — typically about a week after onboarding. You get a report for every appointment booked.",
     icon: Rocket,
   },
 ];
 
 const guarantees = [
   {
-    icon: Shield,
-    title: "No setup fees",
-    description: "You only pay when it works. No hidden costs, no retainers.",
+    icon: DollarSign,
+    title: "What it costs",
+    description:
+      "A campaign fee to build and launch, then $300 per booked appointment. Monthly services are priced on the homepage — no surprises after you sign up.",
   },
   {
     icon: Clock,
-    title: "48-hour launch",
-    description: "From onboarding submission to live campaigns in 2 business days.",
+    title: "How long to live",
+    description:
+      "About a week for most clients. Your number has to be registered with the carriers before the first text sends, and we don't skip that step — it's what keeps your messages delivering instead of landing in spam folders.",
   },
   {
     icon: FileCheck,
-    title: "500-lead free trial",
-    description: "Test the system with zero risk. See results before committing.",
+    title: "What the campaign fee covers",
+    description:
+      "The build: your list cleaned and segmented, your messaging written in your voice, your number registered, and a person watching it run. It's the same work whether your list books five appointments or fifty — that's why it's separate from the per-appointment price.",
   },
 ];
 
@@ -111,12 +114,12 @@ export default function GetStartedPage() {
                   key={step.number}
                   className="flex flex-col gap-4 rounded-2xl border border-border bg-surface-elevated p-6 sm:flex-row sm:items-start sm:gap-6"
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent/10">
-                    <step.icon className="h-5 w-5 text-accent" />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-booked/10">
+                    <step.icon className="h-5 w-5 text-booked" />
                   </div>
                   <div className="flex-1">
                     <div className="mb-1 flex items-center gap-3">
-                      <span className="text-xs font-bold text-accent">
+                      <span className="text-xs font-bold text-booked">
                         Step {step.number}
                       </span>
                     </div>
@@ -142,8 +145,8 @@ export default function GetStartedPage() {
                   key={item.title}
                   className="rounded-2xl border border-border bg-surface-elevated p-6 text-center"
                 >
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
-                    <item.icon className="h-5 w-5 text-accent" />
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-booked/10">
+                    <item.icon className="h-5 w-5 text-booked" />
                   </div>
                   <h3 className="mb-2 text-lg font-semibold text-text-primary">
                     {item.title}
@@ -164,8 +167,8 @@ export default function GetStartedPage() {
               Ready to reactivate your dead leads?
             </h2>
             <p className="mx-auto mb-8 max-w-xl text-text-secondary">
-              Complete your onboarding now and we'll have your campaigns live
-              within 48 hours.
+              Complete your onboarding now — most clients are registered and
+              sending within a week.
             </p>
             <Link href="/onboarding">
               <Button size="lg" className="gap-2">

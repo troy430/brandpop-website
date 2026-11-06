@@ -2,8 +2,8 @@ import Link from "next/link";
 import { SITE } from "@/lib/site";
 
 const footnotes = [
-  "pay only when it books. database reactivation is performance-priced — per booked appointment or a share of revenue it generates. nothing up front, nothing monthly.",
-  "first time with us? we’ll reactivate your first ~500 leads free. if it books appointments, we’ll talk pricing then. that’s the whole negotiation.",
+  "database reactivation is priced per result: a campaign fee to build and launch — $2,500 up to 2,000 contacts, $5,000 up to 7,500, $7,500 up to 15,000 — then $300 for every appointment we book. if we don’t book it, you don’t pay for it.",
+  "ai voice receptionist, speed to lead, live chat, and reputation management each carry a 3-month minimum.",
   "every thread on this page is a real conversation. names and details changed to protect client data.",
   "franchise? we price per location and we’ll walk you through the unit math on the first call.",
 ];

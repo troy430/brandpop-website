@@ -18,7 +18,7 @@ export const SITE = {
       name: "Database Reactivation",
       description:
         "AI SMS revives the lead list you stopped calling. Conversational, personal, compliant — not blasts.",
-      term: "pay per booked appt*",
+      term: "campaign fee + $300/appt",
       performance: true,
     },
     {
@@ -26,7 +26,7 @@ export const SITE = {
       name: "AI Voice Receptionist",
       description:
         "Answers every call, qualifies, books — nights, weekends, lunch rushes. No voicemail, ever.",
-      term: "flat monthly",
+      term: "$400/mo*",
       performance: false,
     },
     {
@@ -34,7 +34,7 @@ export const SITE = {
       name: "Speed to Lead",
       description:
         "A form comes in; the AI is texting back inside 60 seconds — while your competitor’s lead sits in an inbox.",
-      term: "flat monthly",
+      term: "$500 setup + $750/mo*",
       performance: false,
     },
     {
@@ -42,7 +42,7 @@ export const SITE = {
       name: "Live Chat",
       description:
         "Website visitors get answers and appointment slots in real time, not a contact form and a wait.",
-      term: "flat monthly",
+      term: "$1,000 install + $450/mo*",
       performance: false,
     },
     {
@@ -50,7 +50,7 @@ export const SITE = {
       name: "Reputation Management",
       description:
         "Reviews requested, monitored, and answered — your Google profile compounds while you sleep.",
-      term: "flat monthly",
+      term: "$1,000 install + $450/mo*",
       performance: false,
     },
   ],
