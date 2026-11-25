@@ -22,7 +22,7 @@ const rows = [
   },
   {
     label: "What the same list costs at 1% (10,000 contacts)",
-    campaign: "~$37,500, open-ended",
+    campaign: "Not offered at this size — the Install replaces it",
     install: "$25,000, capped",
     partner: "Included",
   },
@@ -73,8 +73,11 @@ export function ChoiceTable() {
         Three sizes of the same promise.
       </h2>
       <p className="mb-[52px] max-w-[64ch] text-[16.5px] text-ink-soft">
-        No column is a discount on another one. Each one is a different
-        amount of us, for a different size of problem.
+        Four of the five services above are a flat monthly fee — what you see
+        is what you pay. Database Reactivation is priced by your list and
+        your results instead, so it's the one worth walking through. No
+        column below is a discount on another; each is a different amount of
+        us, for a different size of problem.
       </p>
 
       <div className="overflow-x-auto">

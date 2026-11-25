@@ -6,9 +6,27 @@ const fmt = (n: number) => n.toLocaleString("en-US");
 
 function campaignFee(leads: number) {
   if (leads <= 2000) return 2500;
-  if (leads <= 7500) return 5000;
-  return 7500;
+  return 5000;
 }
+
+const lineItems = [
+  {
+    label: "your full list reactivated at $300 an appointment",
+    value: "~$30,000",
+  },
+  {
+    label: "speed to lead, installed and run for 90 days",
+    value: "$2,750",
+  },
+  {
+    label: "ai voice answering your after-hours calls for 90 days",
+    value: "$1,200",
+  },
+  {
+    label: "carrier registration, monitoring, and reporting",
+    value: "included",
+  },
+] as const;
 
 export function TheMath() {
   const [leads, setLeads] = useState(2000);
@@ -56,7 +74,7 @@ export function TheMath() {
                 className="calc-range"
                 type="range"
                 min={200}
-                max={10000}
+                max={7000}
                 step={100}
                 value={leads}
                 onChange={(e) => setLeads(+e.target.value)}
@@ -167,6 +185,48 @@ export function TheMath() {
           stale list will do worse. a warm list can do better. either way,
           the per-appointment fee only exists when an appointment actually
           books.
+        </p>
+      </div>
+
+      <div className="mt-9 max-w-[620px]">
+        <p className="mb-5 text-[16.5px] font-light text-ink-soft">
+          Push “dormant leads” past 7,000 and a per-campaign run isn’t the
+          right shape anymore — that’s the Install from the table above:
+          $25,000 flat for your full list, worked in waves, with Speed to
+          Lead and AI voice included for 90 days.
+        </p>
+        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
+          what the install replaces, itemized at our own published prices
+        </p>
+        <ul className="space-y-2.5 font-mono text-[13px] text-ink-soft">
+          {lineItems.map((item) => (
+            <li
+              key={item.label}
+              className="flex items-baseline justify-between gap-4 border-b border-dashed border-rule pb-2.5"
+            >
+              <span className="max-w-[36ch]">{item.label}</span>
+              <span className="whitespace-nowrap text-ink">{item.value}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-[14px] font-light text-ink-soft">
+          That’s roughly $34,000 bought piece by piece.{" "}
+          <span className="font-semibold text-ink">
+            The Install is $25,000, flat.
+          </span>
+        </p>
+
+        <p className="mt-7 max-w-[70ch] text-[16.5px] text-ink-soft">
+          First question, and it’s the only qualifier:{" "}
+          <strong className="font-sans font-medium text-ink">
+            how many old estimates are sitting in your system that never
+            turned into a job?
+          </strong>
+        </p>
+        <p className="mt-3 max-w-[70ch] font-mono text-[13px] leading-[1.8] text-ink-soft">
+          Under 1,000, start with a standard campaign. Between 1,000 and
+          7,000, the ladder pricing above is your route. Over 7,000, the
+          Install was built for you.
         </p>
       </div>
     </section>
