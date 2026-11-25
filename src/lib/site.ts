@@ -6,10 +6,8 @@ export const SITE = {
   url: "https://brandpop.ai",
   email: "troy@brandpop.ai",
   bookingUrl: "https://book.brandpop.ai/widget/bookings/brandpop",
-  // Demo lines. Voice is live and listed in Try It Live (confirmed working
-  // 2026-11-25). SMS is not wired up yet — kept here for when it is.
-  demoSmsPhone: "(448) 242-1263",
-  demoSmsHref: "sms:+14482421263",
+  // Voice demo line, live and listed in Try It Live (confirmed working
+  // 2026-11-25). There is no SMS demo.
   demoVoicePhone: "(570) 539-9116",
   demoVoiceHref: "tel:+15705399116",
   services: [
