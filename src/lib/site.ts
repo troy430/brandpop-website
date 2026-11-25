@@ -6,8 +6,8 @@ export const SITE = {
   url: "https://brandpop.ai",
   email: "troy@brandpop.ai",
   bookingUrl: "https://book.brandpop.ai/widget/bookings/brandpop",
-  // Demo lines — not currently wired up in GHL; kept for when the bots go
-  // live so the Try It Live panel can re-list them.
+  // Demo lines. Voice is live and listed in Try It Live (confirmed working
+  // 2026-11-25). SMS is not wired up yet — kept here for when it is.
   demoSmsPhone: "(570) 539-9116",
   demoSmsHref: "sms:+15705399116",
   demoVoicePhone: "(448) 242-1263",

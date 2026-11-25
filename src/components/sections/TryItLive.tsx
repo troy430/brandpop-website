@@ -1,4 +1,5 @@
 import { OpenChatButton } from "@/components/chat/OpenChatButton";
+import { SITE } from "@/lib/site";
 
 const industries = [
   { label: "dental", message: "I run a dental practice" },
@@ -35,6 +36,22 @@ export function TryItLive() {
             demo. and the reply speed you’ll see is the same engine behind
             speed to lead.
           </p>
+
+          <div className="mt-8 border-t border-dashed border-rule pt-6">
+            <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
+              or call the voice receptionist
+            </p>
+            <a
+              href={SITE.demoVoiceHref}
+              className="font-mono text-[18px] font-semibold text-ink underline decoration-dashed decoration-ink-faint underline-offset-4 hover:decoration-solid"
+            >
+              {SITE.demoVoicePhone}
+            </a>
+            <p className="mt-2 max-w-[48ch] text-[14px] font-light text-ink-soft">
+              Same AI, answering a phone instead of a chat window. No script
+              on that end either.
+            </p>
+          </div>
         </div>
 
         <div className="max-w-[440px] rounded-[22px] bg-night px-[26px] py-[30px] shadow-[0_24px_60px_-12px_rgba(9,9,13,0.45)]">
